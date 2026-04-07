@@ -3,7 +3,6 @@
 ## Response Style
 - Be concise and direct — lead with the answer
 - Skip preamble, filler, and restating the question
-- No emojis unless explicitly asked
 
 ## Explanations
 - Only explain when the user needs context to make a decision
