@@ -18,4 +18,7 @@ ln -sfn "$REPO_DIR/modules" "$TARGET_DIR/modules"
 # Symlink custom commands
 ln -sfn "$REPO_DIR/commands" "$TARGET_DIR/commands"
 
-echo "Linked CLAUDE.md, modules/, and commands/ into $TARGET_DIR"
+# Symlink helper scripts
+ln -sfn "$REPO_DIR/scripts" "$TARGET_DIR/scripts"
+
+echo "Linked CLAUDE.md, modules/, commands/, and scripts/ into $TARGET_DIR"

@@ -63,6 +63,21 @@ git log --oneline HEAD..<target>
 git diff HEAD...<target> --name-only
 ```
 
+Also read git notes for both sides to understand intent:
+
+```bash
+# Fetch notes from remote if available
+git fetch origin refs/notes/commits:refs/notes/commits 2>/dev/null || true
+
+# Show feature branch commits with their intent notes
+git log --oneline --notes <target>..HEAD
+
+# Show target branch commits with their intent notes
+git log --oneline --notes HEAD..<target>
+```
+
+Use these notes to understand the **why** behind each change before resolving any conflicts.
+
 Summarize: "Main is N commits ahead. Files likely to conflict: [list]."
 
 Detect **complexity signals** that suggest semantic rebase may be needed:
@@ -84,15 +99,17 @@ git rebase <target>
 
 For EACH conflict:
 
-**a.** Study the target branch's changes to that file:
+**a.** Study the target branch's changes to that file, including intent notes:
 ```bash
-git log -p -n 5 <target> -- <conflicting-file>
+git log -p -n 5 --notes <target> -- <conflicting-file>
 ```
 
-**b.** Study the feature branch's intent for that file:
+**b.** Study the feature branch's intent for that file, including intent notes:
 ```bash
-git log -p -n 5 HEAD -- <conflicting-file>
+git log -p -n 5 --notes HEAD -- <conflicting-file>
 ```
+
+Use the git notes to understand the reasoning behind each side's changes. Notes that mention dependencies or assumptions are especially valuable for determining resolution priority.
 
 **c.** Resolution priority:
 - **Target branch wins** → structural changes, refactors, renames, new abstractions, deleted code, interface/API changes
@@ -157,7 +174,10 @@ For each commit, run:
 ```bash
 git show <hash> --stat
 git show <hash> -p
+git notes show <hash> 2>/dev/null   # read existing intent note if present
 ```
+
+If a git note exists for the commit, use it as the **primary source of intent** — it was written at commit time and reflects the author's reasoning. Supplement with diff analysis, but prefer the note's description of why the change was made.
 
 For each commit, write:
 
